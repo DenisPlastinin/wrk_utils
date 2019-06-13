@@ -32,3 +32,8 @@ ROOT_PASS="123qwe123"
 /usr/bin/gcloud beta sql instances create sql-data-$INSTANCE_NAME --tier=$DB_MACHINE_TYPE --region=$REGION --network=default --no-assign-ip --async
 ###set password for root
 /usr/bin/gcloud  sql users set-password root --host=%  --instance=sql-data-$INSTANCE_NAME --password=$ROOT_PASS
+EXT_IP_INSTANCE=$(/usr/bin/gcloud compute instances list --filter="NAME:( $INSTANCE_NAME )" | awk '{ print $5}' | tail -n 1);
+INT_IP_DB_INSTANCE=$(/usr/bin/gcloud sql instances list --filter="NAME:( sql-data-$INSTANCE_NAME )" | awk '{ print $6}' | tail -n 1);
+echo -e "External IP: $INSTANCE_NAME - $EXT_IP_INSTANCE"
+echo -e "Internal IP: sql-data-$INSTANCE_NAME - $INT_IP_DB_INSTANCE"
+
